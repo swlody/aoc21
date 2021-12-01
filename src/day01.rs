@@ -4,22 +4,20 @@ pub fn input_generator(input: &str) -> Vec<u32> {
     input.lines().map(|line| line.parse().unwrap()).collect()
 }
 
-pub fn solve_part1(depths: &[u32]) -> usize {
+fn count(depths: impl IntoIterator<Item = u32>) -> usize {
     depths
-        .iter()
+        .into_iter()
         .tuple_windows()
         .filter(|(last_depth, current_depth)| current_depth > last_depth)
         .count()
 }
 
+pub fn solve_part1(depths: &[u32]) -> usize {
+    count(depths.iter().cloned())
+}
+
 pub fn solve_part2(depths: &[u32]) -> usize {
-    depths
-        .windows(3)
-        .tuple_windows()
-        .filter(|(first_window, second_window)| {
-            second_window.iter().sum::<u32>() > first_window.iter().sum()
-        })
-        .count()
+    count(depths.windows(3).map(|window| window.iter().sum()))
 }
 
 #[cfg(test)]
