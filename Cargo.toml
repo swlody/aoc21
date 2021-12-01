@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 aoc-main = { git = "https://github.com/swlody/aoc", branch = "main" }
+itertools = "0.10.1"
