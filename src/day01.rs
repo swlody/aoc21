@@ -20,6 +20,18 @@ pub fn solve_part2(depths: &[u32]) -> usize {
     count(depths.windows(3).map(|window| window.iter().sum()))
 }
 
+#[allow(dead_code)]
+fn solve_part2_alternate(depths: &[u32]) -> usize {
+    // The only difference between the second window and the first window is that
+    // the first element of the first window is replaced by the last element of the second window.
+    // Therefore if that last element is greater than the first element, the sum of the
+    // second window will be greater than the sum of the first window.
+    depths
+        .windows(4)
+        .filter(|window| window[3] > window[0])
+        .count()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -45,5 +57,6 @@ mod tests {
     fn test_part2() {
         let depths = input_generator(INPUT);
         assert_eq!(5, solve_part2(&depths));
+        assert_eq!(5, solve_part2_alternate(&depths));
     }
 }
