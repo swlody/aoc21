@@ -45,6 +45,72 @@ pub fn solve_part1(report: &str) -> usize {
     gamma * epsilon
 }
 
+pub fn solve_part2(input: &str) -> u64 {
+    let mut common_candidates = input
+        .lines()
+        .map(|line| line.to_owned())
+        .collect::<Vec<String>>();
+    let mut uncommon_candidates = common_candidates.clone();
+
+    let length = common_candidates[0].len();
+
+    let mut co2_rating = 0;
+    let mut o2_rating = 0;
+
+    for i in 0..length {
+        let mut common_ones_count = 0;
+        let mut common_zeroes_count = 0;
+        let mut uncommon_ones_count = 0;
+        let mut uncommon_zeroes_count = 0;
+
+        let mut ones_common_candidates = Vec::new();
+        let mut zeroes_common_candidates = Vec::new();
+        let mut ones_uncommon_candidates = Vec::new();
+        let mut zeroes_uncommon_candidates = Vec::new();
+
+        for num in common_candidates {
+            if num.as_bytes()[i] == b'1' {
+                common_ones_count += 1;
+                ones_common_candidates.push(num);
+            } else {
+                common_zeroes_count += 1;
+                zeroes_common_candidates.push(num);
+            }
+        }
+
+        for num in uncommon_candidates {
+            if num.as_bytes()[i] == b'1' {
+                uncommon_ones_count += 1;
+                ones_uncommon_candidates.push(num);
+            } else {
+                uncommon_zeroes_count += 1;
+                zeroes_uncommon_candidates.push(num);
+            }
+        }
+
+        if common_ones_count >= common_zeroes_count {
+            common_candidates = ones_common_candidates;
+        } else {
+            common_candidates = zeroes_common_candidates;
+        }
+
+        if uncommon_ones_count < uncommon_zeroes_count {
+            uncommon_candidates = ones_uncommon_candidates;
+        } else {
+            uncommon_candidates = zeroes_uncommon_candidates;
+        }
+
+        if common_candidates.len() == 1 {
+            o2_rating = u64::from_str_radix(&common_candidates[0], 2).unwrap();
+        }
+        if uncommon_candidates.len() == 1 {
+            co2_rating = u64::from_str_radix(&uncommon_candidates[0], 2).unwrap();
+        }
+    }
+
+    o2_rating * co2_rating
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -65,5 +131,10 @@ mod tests {
     #[test]
     fn test_part1() {
         assert_eq!(198, solve_part1(&INPUT));
+    }
+
+    #[test]
+    fn test_part2() {
+        assert_eq!(230, solve_part2(&INPUT));
     }
 }
