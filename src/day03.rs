@@ -68,6 +68,7 @@ pub fn solve_part2(input: &str) -> u64 {
         let mut ones_uncommon_candidates = Vec::new();
         let mut zeroes_uncommon_candidates = Vec::new();
 
+        // This loop will keep running even if we've already calculated the O2/CO2 rating, whoops
         for num in common_candidates {
             if num.as_bytes()[i] == b'1' {
                 common_ones_count += 1;
